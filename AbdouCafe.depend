@@ -1,6 +1,5 @@
 # depslib dependency file v1.0
-1668782128 source:e:\cproject\abdoucafe\main.c
+1668882226 source:e:\cproject\abdoucafe\main.c
 	<stdio.h>
 	<stdlib.h>
-	<windows.h>
 
