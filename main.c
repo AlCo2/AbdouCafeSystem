@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <windows.h>
 void welcome(){
     system("cls");
     printf("\t\t\t\t\t-----------------------\n");
@@ -101,11 +101,10 @@ void showItems(){
     if(fp0 == NULL){
         return 1;
     }
-    char *evrything;
-    while(fgets(evrything, 100, fp0)!=NULL){
+    char evrything[100];
+    while(fgets(evrything, 100, fp0)!= NULL){
         printf("%s", evrything);
     }
-
     fclose(fp0);
 }
 void showfac(){
@@ -113,7 +112,7 @@ void showfac(){
     if(fpfac == NULL){
         return 1;
     }
-    char *evrything;
+    char evrything[100];
     while(fgets(evrything, 100, fpfac)!=NULL){
         printf("%s", evrything);
     }
@@ -262,8 +261,8 @@ void abdoutme(){
 }
 float total(int id, int q);
 float getprice(int id);
-int main()
-{
+void abdouCafe(){
+    system("color 3");
     int choix, start, choix1;
     start = 1;
     while(start)
@@ -272,7 +271,7 @@ int main()
     printf("\n");
     welcome();
     printf("==========================================================================\n");
-    printf("1-Items\n2-make a facture\n3-About Me\n4-stop the App\n");
+    printf("1-Items\n2-make a facture\n3-stop the App\n4-About Me\n");
     printf("take a choice: ");
     scanf("%d", &choix);
     switch(choix){
@@ -387,6 +386,7 @@ int main()
                 }
                 break;
             case 4:
+                system("cls");
                 printf("=========================\n\n");
                 showItems();
                 printf("\n\n=========================");
@@ -416,12 +416,19 @@ int main()
         if(fp1 == NULL){
             return 1;
         }
+
+        SYSTEMTIME t;
+        GetLocalTime(&t);
+        printf("Year: %d, Month: %d, Day: %d, Hour: %d, Minute:%d, Second: %d, Millisecond: %d", t.wYear, t.wMonth, t.wDay, t.wHour, t.wMinute, t.wSecond, t.wMilliseconds);
         fprintf(fp1 ,"----------------------------------------------------\n");
         fprintf(fp1 ,"|                *Abdou Facture*                   |\n");
+        fprintf(fp1 ,"|                                                  |\n");
+        fprintf(fp1 ,"|     %4d/%2d/%2d %2d:%2d                             |\n", t.wYear, t.wMonth, t.wDay, t.wHour, t.wMinute);
         fprintf(fp1 ,"|                                                  |\n");
         int idInfac = 1;
         float totalfac = 0;
         while(facStart){
+            system("cls");
             printf("\n~~~~~~~~~~~~~~~");
             printf("\n");
             showItems();
@@ -452,29 +459,29 @@ int main()
                 }
             fclose(fname);
             float pricex = getprice(itemChoice);
-            fprintf(fp1 ,"|        %d- %d*%.2f %s         ",idInfac, q,pricex ,namex);
-            fprintf(fp1, "%.2fDH\n", totali);
+            fprintf(fp1 ,"|%3d-%2d*%6.2f %-28s",idInfac, q,pricex ,namex);
+            fprintf(fp1, "%6.2fDH|\n", totali);
             totalfac+=totali;
             idInfac++;
-            printf("%\t\t           ====================       total: %.2fDH       ====================            \n", totalfac);
         }
         fprintf(fp1 ,"|                                                  |\n");
-        fprintf(fp1 ,"|                              total: %.2fDH      |\n", totalfac);
+        fprintf(fp1 ,"|                            total:  %6.2fDH      |\n", totalfac);
         fprintf(fp1, "----------------------------------------------------");
         fclose(fp1);
         printf("---------------------------------------------------------\n");
+        system("cls");
         showfac();
         getch();
         system("cls");
         break;
     case 3:
+        start=0;
+        break;
+    case 4:
         system("cls");
         abdoutme();
         printf("\n");
         getch();
-        break;
-    case 4:
-        start=0;
         break;
     default:
         system("cls");
@@ -484,6 +491,54 @@ int main()
         break;
     }
     }
+}
+void auth(){
+    int trying = 3;
+    int loading = 20;
+    char username[10];
+    char password[10];
+    char user[10] = "abdou";
+    char pass[] = "1234";
+    printf("-----------User Login-----------\n");
+    while(trying>0){
+        if(trying==3){
+            system("color 3");
+        }
+        if(trying==2)
+            system("color 2");
+        if(trying==1)
+            system("color 4");
+
+        printf("number of try: %d\n", trying);
+        printf("Username: ");
+        scanf("%s", username);
+        printf("Password: ");
+        scanf("%s", password);
+        if(strcmp(user, username)){
+            sleep(1);
+            printf("error in username!\n");
+            trying--;
+        }else{
+            if(strcmp(pass, password)){
+                sleep(1);
+                printf("error in password!\n");
+                trying--;
+            }else{
+                system("cls");
+                printf("\t=====login Succesful======\n");
+                printf("Loading App: ");
+                for(int i=0;i<=5;i++){
+                    printf("%d%% ", loading*i);
+                    sleep(1);
+                }
+                abdouCafe();
+            }
+        }
+    }
+}
+int main()
+{
+    auth();
     return 0;
 }
 float total(int id, int q){
